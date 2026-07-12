@@ -1,0 +1,15 @@
+{% extends 'tasks/base.html' %}
+{% block content %}
+<h1>Mes tâches</h1>
+<a href="{% url 'task_create' %}">+ Nouvelle tâche</a>
+<ul>
+    {% for task in tasks %}
+        <li>
+            <a href="{% url 'task_detail' task.pk %}">{{ task.titre }}</a>
+            — {{ task.get_statut_display }} — {{ task.get_priorite_display }}
+        </li>
+    {% empty %}
+        <p>Aucune tâche pour le moment.</p>
+    {% endfor %}
+</ul>
+{% endblock %}
