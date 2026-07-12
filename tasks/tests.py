@@ -48,13 +48,15 @@ class TaskViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_task_list_view(self):
-        """Vérifie que la liste des tâches s'affiche et contient la tâche créée"""
+        """Vérifie qu'un utilisateur connecté voit bien sa liste de tâches"""
+        self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('task_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Tâche visible')
 
     def test_task_detail_view(self):
-        """Vérifie que le détail d'une tâche s'affiche correctement"""
+        """Vérifie qu'un utilisateur connecté peut voir le détail de sa propre tâche"""
+        self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('task_detail', args=[self.task.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Tâche visible')
@@ -73,7 +75,7 @@ class TaskViewsTest(TestCase):
             'statut': 'a_faire',
             'priorite': 'basse',
         })
-        self.assertEqual(response.status_code, 302)  # redirection après succès
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(Task.objects.filter(titre='Nouvelle tâche créée').exists())
 
     def test_task_update(self):
@@ -95,3 +97,24 @@ class TaskViewsTest(TestCase):
         response = self.client.post(reverse('task_delete', args=[self.task.pk]))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Task.objects.filter(pk=self.task.pk).exists())
+
+    def test_user_cannot_access_others_task(self):
+        """Vérifie qu'un utilisateur ne peut pas consulter la tâche d'un autre utilisateur"""
+        other_user = User.objects.create_user(username='otheruser', password='otherpass123')
+        self.client.login(username='otheruser', password='otherpass123')
+        response = self.client.get(reverse('task_detail', args=[self.task.pk]))
+        self.assertEqual(response.status_code, 403)
+
+    def test_user_list_only_shows_own_tasks(self):
+        """Vérifie qu'un utilisateur ne voit que ses propres tâches dans la liste"""
+        other_user = User.objects.create_user(username='otheruser', password='otherpass123')
+        Task.objects.create(
+            titre='Tâche d\'un autre utilisateur',
+            statut='a_faire',
+            priorite='basse',
+            auteur=other_user
+        )
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(reverse('task_list'))
+        self.assertContains(response, 'Tâche visible')
+        self.assertNotContains(response, 'Tâche d\'un autre utilisateur')
