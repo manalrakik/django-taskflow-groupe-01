@@ -2,6 +2,28 @@
 {% block content %}
 <h1>Mes tâches</h1>
 <a href="{% url 'task_create' %}">+ Nouvelle tâche</a>
+
+<form method="get" style="margin: 1.5rem 0;">
+    <input type="text" name="q" placeholder="Rechercher par titre..." value="{{ recherche }}">
+
+    <select name="statut">
+        <option value="">Tous les statuts</option>
+        {% for value, label in statut_choices %}
+            <option value="{{ value }}" {% if statut_selectionne == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="priorite">
+        <option value="">Toutes les priorités</option>
+        {% for value, label in priorite_choices %}
+            <option value="{{ value }}" {% if priorite_selectionnee == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filtrer</button>
+    <a href="{% url 'task_list' %}">Réinitialiser</a>
+</form>
+
 <ul>
     {% for task in tasks %}
         <li>
@@ -9,7 +31,7 @@
             — {{ task.get_statut_display }} — {{ task.get_priorite_display }}
         </li>
     {% empty %}
-        <p>Aucune tâche pour le moment.</p>
+        <p>Aucune tâche ne correspond à ces critères.</p>
     {% endfor %}
 </ul>
 {% endblock %}

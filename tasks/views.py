@@ -31,7 +31,30 @@ class TaskListView(LoginRequiredMixin, ListView):
     ordering = ['-date_creation']
 
     def get_queryset(self):
-        return Task.objects.filter(auteur=self.request.user)
+        queryset = Task.objects.filter(auteur=self.request.user)
+
+        recherche = self.request.GET.get('q')
+        if recherche:
+            queryset = queryset.filter(titre__icontains=recherche)
+
+        statut = self.request.GET.get('statut')
+        if statut:
+            queryset = queryset.filter(statut=statut)
+
+        priorite = self.request.GET.get('priorite')
+        if priorite:
+            queryset = queryset.filter(priorite=priorite)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recherche'] = self.request.GET.get('q', '')
+        context['statut_selectionne'] = self.request.GET.get('statut', '')
+        context['priorite_selectionnee'] = self.request.GET.get('priorite', '')
+        context['statut_choices'] = Task.STATUT_CHOICES
+        context['priorite_choices'] = Task.PRIORITE_CHOICES
+        return context
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'tasks/task_detail.html'
