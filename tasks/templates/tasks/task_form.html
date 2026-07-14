@@ -1,9 +1,70 @@
 {% extends 'tasks/base.html' %}
 {% block content %}
 <h1>{% if object %}Modifier la tâche{% else %}Nouvelle tâche{% endif %}</h1>
-<form method="post">
+<form method="post" id="task-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Enregistrer</button>
+    <p id="suggestion-box" style="display:none; font-size:0.85rem; color:#854f0b; background:#faeeda; padding:0.5rem 0.8rem; border-radius:6px;"></p>
+    <button type="submit" class="btn">Enregistrer</button>
 </form>
+
+<script>
+(function() {
+    const titreInput = document.querySelector('#id_titre');
+    const descriptionInput = document.querySelector('#id_description');
+    const prioriteSelect = document.querySelector('#id_priorite');
+    const suggestionBox = document.querySelector('#suggestion-box');
+
+    if (!titreInput || !prioriteSelect) return;
+
+    let prioriteModifieeManuellement = false;
+    prioriteSelect.addEventListener('change', function() {
+        prioriteModifieeManuellement = true;
+    });
+
+    const motsHaute = ['urgent', 'urgente', 'examen', 'deadline', 'immediat', 'important', 'critique', 'aujourd hui', 'demain'];
+    const motsBasse = ['un jour', 'eventuellement', 'plus tard', 'si possible', 'quand j ai le temps', 'facultatif'];
+
+    function analyserTexte() {
+        if (prioriteModifieeManuellement) return;
+
+        const texte = (titreInput.value + ' ' + (descriptionInput ? descriptionInput.value : '')).toLowerCase();
+
+        let suggestion = null;
+        let motDetecte = null;
+
+        for (const mot of motsHaute) {
+            if (texte.includes(mot)) {
+                suggestion = 'haute';
+                motDetecte = mot;
+                break;
+            }
+        }
+
+        if (!suggestion) {
+            for (const mot of motsBasse) {
+                if (texte.includes(mot)) {
+                    suggestion = 'basse';
+                    motDetecte = mot;
+                    break;
+                }
+            }
+        }
+
+        if (suggestion) {
+            prioriteSelect.value = suggestion;
+            const labels = {haute: 'Haute', moyenne: 'Moyenne', basse: 'Basse'};
+            suggestionBox.textContent = 'Priorite suggeree : ' + labels[suggestion] + ' (mot-cle detecte : ' + motDetecte + ')';
+            suggestionBox.style.display = 'block';
+        } else {
+            suggestionBox.style.display = 'none';
+        }
+    }
+
+    titreInput.addEventListener('input', analyserTexte);
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', analyserTexte);
+    }
+})();
+</script>
 {% endblock %}
