@@ -7,8 +7,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Task
 from django import forms
-from django import forms
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
+from django.utils import timezone
 
 
 def home(request):
@@ -54,6 +55,34 @@ class TaskListView(LoginRequiredMixin, ListView):
         context['priorite_selectionnee'] = self.request.GET.get('priorite', '')
         context['statut_choices'] = Task.STATUT_CHOICES
         context['priorite_choices'] = Task.PRIORITE_CHOICES
+        return context
+    
+class DashboardView(LoginRequiredMixin, ListView):
+    model = Task
+    template_name = 'tasks/dashboard.html'
+    context_object_name = 'tasks'
+
+    def get_queryset(self):
+        return Task.objects.filter(auteur=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        taches = Task.objects.filter(auteur=self.request.user)
+        aujourd_hui = timezone.now().date()
+
+        context['total'] = taches.count()
+        context['a_faire'] = taches.filter(statut='a_faire').count()
+        context['en_cours'] = taches.filter(statut='en_cours').count()
+        context['terminees'] = taches.filter(statut='termine').count()
+
+        context['en_retard'] = taches.filter(
+            date_limite__lt=aujourd_hui
+        ).exclude(statut='termine').count()
+
+        context['a_venir'] = taches.filter(
+            date_limite__gte=aujourd_hui
+        ).exclude(statut='termine').order_by('date_limite')[:5]
+
         return context
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task

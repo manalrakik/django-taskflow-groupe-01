@@ -1,9 +1,9 @@
 {% extends 'tasks/base.html' %}
 {% block content %}
 <h1>Mes tâches</h1>
-<a href="{% url 'task_create' %}">+ Nouvelle tâche</a>
+<a href="{% url 'task_create' %}" class="btn">+ Nouvelle tâche</a>
 
-<form method="get" style="margin: 1.5rem 0;">
+<form method="get" class="filter-bar">
     <input type="text" name="q" placeholder="Rechercher par titre..." value="{{ recherche }}">
 
     <select name="statut">
@@ -20,18 +20,21 @@
         {% endfor %}
     </select>
 
-    <button type="submit">Filtrer</button>
-    <a href="{% url 'task_list' %}">Réinitialiser</a>
+    <button type="submit" class="btn btn-secondary">Filtrer</button>
+    <a href="{% url 'task_list' %}" class="btn btn-secondary">Réinitialiser</a>
 </form>
 
-<ul>
+<div>
     {% for task in tasks %}
-        <li>
-            <a href="{% url 'task_detail' task.pk %}">{{ task.titre }}</a>
-            — {{ task.get_statut_display }} — {{ task.get_priorite_display }}
-        </li>
+        <div class="task-card">
+            <a href="{% url 'task_detail' task.pk %}" class="task-title">{{ task.titre }}</a>
+            <div class="task-meta">
+                <span class="badge badge-{{ task.priorite }}">{{ task.get_priorite_display }}</span>
+                <span class="badge badge-{{ task.statut }}">{{ task.get_statut_display }}</span>
+            </div>
+        </div>
     {% empty %}
         <p>Aucune tâche ne correspond à ces critères.</p>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

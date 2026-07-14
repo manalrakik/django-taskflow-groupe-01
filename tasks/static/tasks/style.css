@@ -1,5 +1,171 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-nav { background: #2c3e50; padding: 1rem; display: flex; gap: 1rem; }
-nav a, nav button { color: white; text-decoration: none; background: none; border: none; cursor: pointer; }
-main { padding: 2rem; max-width: 800px; margin: auto; }
-.message { background: #dff0d8; padding: 0.5rem; border-radius: 4px; }
+:root {
+    --primary: #2c3e50;
+    --accent: #3b82f6;
+    --success-bg: #eaf3de; --success-text: #3b6d11;
+    --warning-bg: #faeeda; --warning-text: #854f0b;
+    --danger-bg: #fcebeb; --danger-text: #a32d2d;
+    --gray-bg: #f4f4f4; --gray-text: #555;
+    --border: #e0e0e0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fafafa;
+    color: #222;
+}
+
+nav {
+    background: var(--primary);
+    padding: 0.9rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+nav a, nav span, nav button {
+    color: white;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+nav a:hover { text-decoration: underline; }
+
+nav form { margin-left: auto; }
+
+main {
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+}
+
+.message {
+    background: var(--success-bg);
+    color: var(--success-text);
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    margin: 0;
+}
+
+/* Boutons */
+.btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+}
+.btn:hover { background: #2563eb; }
+.btn-secondary {
+    background: white;
+    color: var(--primary);
+    border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--gray-bg); }
+.btn-danger {
+    background: #e24b4a;
+    color: white;
+}
+.btn-danger:hover { background: #c23c3b; }
+
+/* Formulaires */
+form input[type="text"],
+form select,
+form textarea {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+}
+
+form p { margin: 0.8rem 0; }
+form label { display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.9rem; }
+
+/* Cartes de tâches */
+.task-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-card a.task-title {
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 1rem;
+}
+.task-card a.task-title:hover { text-decoration: underline; }
+
+.task-meta { display: flex; gap: 0.4rem; align-items: center; }
+
+/* Badges statut / priorité */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.badge-a_faire, .badge-basse { background: var(--gray-bg); color: var(--gray-text); }
+.badge-en_cours, .badge-moyenne { background: var(--warning-bg); color: var(--warning-text); }
+.badge-termine { background: var(--success-bg); color: var(--success-text); }
+.badge-haute { background: var(--danger-bg); color: var(--danger-text); }
+
+/* Tableau de bord */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+}
+.stat-label { color: #888; font-size: 0.85rem; margin: 0 0 0.3rem; }
+.stat-value { font-size: 1.6rem; font-weight: 700; margin: 0; }
+
+.alert-danger {
+    background: var(--danger-bg);
+    color: var(--danger-text);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+/* Barre de recherche / filtres */
+.filter-bar {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    margin: 1.2rem 0;
+    flex-wrap: wrap;
+}

@@ -2,12 +2,14 @@
 {% block content %}
 <h1>{{ task.titre }}</h1>
 <p>{{ task.description }}</p>
-<p>Statut : {{ task.get_statut_display }}</p>
-<p>Priorité : {{ task.get_priorite_display }}</p>
+<p>
+    <span class="badge badge-{{ task.statut }}">{{ task.get_statut_display }}</span>
+    <span class="badge badge-{{ task.priorite }}">{{ task.get_priorite_display }}</span>
+</p>
 <p>Date limite : {{ task.date_limite }}</p>
 <p>Créée le : {{ task.date_creation }}</p>
 
-<a href="{% url 'task_update' task.pk %}">Modifier</a>
-<a href="{% url 'task_delete' task.pk %}">Supprimer</a>
-<a href="{% url 'task_list' %}">Retour à la liste</a>
+<a href="{% url 'task_update' task.pk %}" class="btn btn-secondary">Modifier</a>
+<a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">Supprimer</a>
+<a href="{% url 'task_list' %}" class="btn btn-secondary">Retour à la liste</a>
 {% endblock %}

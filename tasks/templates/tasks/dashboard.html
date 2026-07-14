@@ -1,0 +1,43 @@
+{% extends 'tasks/base.html' %}
+{% block content %}
+<h1>Tableau de bord</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <p class="stat-label">Total</p>
+        <p class="stat-value">{{ total }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">À faire</p>
+        <p class="stat-value">{{ a_faire }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">En cours</p>
+        <p class="stat-value">{{ en_cours }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Terminées</p>
+        <p class="stat-value">{{ terminees }}</p>
+    </div>
+</div>
+
+{% if en_retard > 0 %}
+<div class="alert-danger">
+    <strong>{{ en_retard }} tâche(s) en retard</strong>
+</div>
+{% endif %}
+
+<h2>Prochaines échéances</h2>
+<div>
+    {% for task in a_venir %}
+        <div class="task-card">
+            <a href="{% url 'task_detail' task.pk %}" class="task-title">{{ task.titre }}</a>
+            <span class="badge badge-{{ task.priorite }}">échéance le {{ task.date_limite }}</span>
+        </div>
+    {% empty %}
+        <p>Aucune échéance à venir.</p>
+    {% endfor %}
+</div>
+
+<a href="{% url 'task_list' %}" class="btn btn-secondary">Voir toutes mes tâches</a>
+{% endblock %}

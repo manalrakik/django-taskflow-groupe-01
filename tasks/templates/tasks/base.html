@@ -11,6 +11,7 @@
         <a href="{% url 'home' %}">Accueil</a>
         <a href="{% url 'about' %}">À propos</a>
         <a href="{% url 'task_list' %}">Mes tâches</a>
+        <a href="{% url 'dashboard' %}">Tableau de bord</a>
         {% if user.is_authenticated %}
             <span>Bonjour, {{ user.username }}</span>
             <form method="post" action="{% url 'logout' %}" style="display:inline;">
