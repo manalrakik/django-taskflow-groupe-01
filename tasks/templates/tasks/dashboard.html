@@ -7,19 +7,29 @@
         <p class="stat-label">Total</p>
         <p class="stat-value">{{ total }}</p>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-info">
         <p class="stat-label">À faire</p>
         <p class="stat-value">{{ a_faire }}</p>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-warning">
         <p class="stat-label">En cours</p>
         <p class="stat-value">{{ en_cours }}</p>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-success">
         <p class="stat-label">Terminées</p>
         <p class="stat-value">{{ terminees }}</p>
     </div>
 </div>
+
+{% if total > 0 %}
+<div class="stat-card" style="margin-bottom:1.5rem;">
+    <p class="stat-label">Progression globale</p>
+    <div style="background:var(--border); border-radius:20px; height:10px; overflow:hidden; margin-top:0.5rem;">
+        <div style="background:var(--success-text); height:100%; width:{{ pourcentage_termine }}%;"></div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin:0.5rem 0 0;">{{ pourcentage_termine }}% des tâches terminées</p>
+</div>
+{% endif %}
 
 {% if en_retard > 0 %}
 <div class="alert-danger">

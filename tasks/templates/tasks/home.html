@@ -1,6 +1,42 @@
 {% extends 'tasks/base.html' %}
 {% block content %}
-<h1>Bienvenue sur TaskFlow</h1>
-<p>Gérez vos tâches quotidiennes facilement : créez, organisez et suivez votre progression.</p>
-<a href="{% url 'task_list' %}">Voir mes tâches</a>
+
+<div style="text-align:center; padding: 3rem 1rem 2rem;">
+    <div style="display:inline-block; background:var(--info-bg); color:var(--info-text); padding:0.4rem 1rem; border-radius:20px; font-size:0.85rem; margin-bottom:1rem;">
+        Gestion de tâches simple et efficace
+    </div>
+    <h1 style="font-size:2.3rem; margin:0.5rem 0;">Bienvenue sur TaskFlow</h1>
+    <p style="color:var(--text-muted); font-size:1.05rem; max-width:500px; margin:0.8rem auto 1.8rem;">
+        Créez, organisez et suivez vos tâches quotidiennes en un seul endroit, avec des rappels d'échéances et un tableau de bord clair.
+    </p>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'task_list' %}" class="btn">Voir mes tâches</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Tableau de bord</a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="btn">Créer un compte</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">Se connecter</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="stats-grid" style="margin-top:2.5rem;">
+    <div class="stat-card">
+        <p class="stat-label">Créer</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin:0;">Ajoutez vos tâches avec statut, priorité et échéance.</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Organiser</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin:0;">Filtrez par statut ou priorité, recherchez par titre.</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Suivre</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin:0;">Consultez vos statistiques depuis le tableau de bord.</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Sécuriser</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin:0;">Chaque utilisateur ne voit que ses propres tâches.</p>
+    </div>
+</div>
+
 {% endblock %}

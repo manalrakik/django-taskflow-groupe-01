@@ -83,6 +83,8 @@ class DashboardView(LoginRequiredMixin, ListView):
             date_limite__gte=aujourd_hui
         ).exclude(statut='termine').order_by('date_limite')[:5]
 
+        context['pourcentage_termine'] = round((context['terminees'] / context['total']) * 100) if context['total'] > 0 else 0
+
         return context
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task

@@ -27,7 +27,7 @@
 <div>
     {% for task in tasks %}
         <div class="task-card">
-            <a href="{% url 'task_detail' task.pk %}" class="task-title">{{ task.titre }}</a>
+            <a href="{% url 'task_detail' task.pk %}" class="task-title" {% if task.statut == 'termine' %}style="text-decoration: line-through; color: var(--text-muted);"{% endif %}>{{ task.titre }}</a>
             <div class="task-meta">
                 <span class="badge badge-{{ task.priorite }}">{{ task.get_priorite_display }}</span>
                 <span class="badge badge-{{ task.statut }}">{{ task.get_statut_display }}</span>
